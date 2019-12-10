@@ -14,7 +14,7 @@ export type FetchAccessToken = (...args: any[]) => Promise<Response>;
 export type HandleFetch = (accessToken: string) => void;
 export type HandleResponse = (operation: Operation, accessTokenField: string) => any;
 export type HandleError = (err: Error) => void;
-export type IsTokenValidOrUndefined = (...args: any[]) => boolean;
+export type IsTokenValidOrUndefined = (operation: Operation, ...args: any[]) => boolean;
 
 // Used for any Error for data from the server
 // on a request with a Status >= 300
@@ -132,7 +132,7 @@ export class TokenRefreshLink extends ApolloLink {
     }
     // If token does not exists, which could means that this is a not registered
     // user request, or if it is does not expired -- act as always
-    if (this.isTokenValidOrUndefined()) {
+    if (this.isTokenValidOrUndefined(operation)) {
       return forward(operation);
     }
 
